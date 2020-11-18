@@ -17,7 +17,7 @@ export default function Home() {
 
       <main className={styles.main}>
         <h1 className={styles.title}>
-          Example Imprement Redux witch{" "}
+          Example Imprement Redux with{" "}
           <a href="https://nextjs.org">Next.js! </a>
         </h1>
         <h4 style={{ color: "rgb(115, 132, 147)", fontSize: 12 }}>
