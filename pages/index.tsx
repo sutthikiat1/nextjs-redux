@@ -2,12 +2,15 @@ import Head from "next/head";
 import styles from "../styles/Home.module.css";
 import { useSelector, useDispatch } from "react-redux";
 import styled from "styled-components";
+import { useEffect } from "react";
+import withRedux from "next-redux-wrapper";
 
-export default function Home() {
+const Home = () => {
   const counter = useSelector((store) => store.counter);
   const dispatch = useDispatch();
 
   console.log(counter);
+
   return (
     <div className={styles.container}>
       <Head>
@@ -24,7 +27,7 @@ export default function Home() {
           redux , next-redux-wrapper , redux-persist , styled-component
         </h4>
 
-        <p className={styles.description}>Count : {counter.count}</p>
+        <p className={styles.description}>Count : {counter?.count || "0"}</p>
 
         <ContainerButton>
           <ButtonInCreedment
@@ -50,7 +53,9 @@ export default function Home() {
       </footer>
     </div>
   );
-}
+};
+
+export default Home;
 
 const ContainerButton = styled.div`
   display: flex;

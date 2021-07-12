@@ -1,27 +1,25 @@
-import React from "react";
-import App, { AppInitialProps, AppContext } from "next/app";
-import { wrapper } from "../store/index";
+import React, { useEffect } from "react";
 
-class MyApp extends App<AppInitialProps> {
-  public static getInitialProps = async ({ Component, ctx }: AppContext) => {
-    // Keep in mind that this will be called twice on server, one for page and second for error page
-    ctx.store.dispatch({ type: "APP", payload: "was set in _app" });
-    return {
-      pageProps: {
-        // Call page-level getInitialProps
-        ...(Component.getInitialProps
-          ? await Component.getInitialProps(ctx)
-          : {}),
-        // Some custom thing for all pages
-        appProp: ctx.pathname,
-      },
-    };
-  };
+import { useStore } from "../store";
+import { Provider } from "react-redux";
+import { persistStore } from "redux-persist";
+import { PersistGate } from "redux-persist/integration/react";
 
-  public render() {
-    const { Component, pageProps } = this.props;
-    return <Component {...pageProps} />;
-  }
+export default function App({ Component, pageProps }) {
+  useEffect(() => {
+    console.log("hello");
+  }, []);
+
+  const store = useStore(pageProps.initialReduxState);
+  const persistor = persistStore(store, {}, function () {
+    persistor.persist();
+  });
+
+  return (
+    <Provider store={store}>
+      <PersistGate loading={<div>LoadingPage..</div>} persistor={persistor}>
+        <Component {...pageProps} />
+      </PersistGate>
+    </Provider>
+  );
 }
-
-export default wrapper.withRedux(MyApp);
